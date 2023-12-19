@@ -1,0 +1,36 @@
+import random
+
+def is_valid_input(input_str):
+    return input_str.isalpha() and len(input_str) == 1
+
+word_list = [['Believe', 'you', 'can'], ['Love', 'is', 'everything'], ['Let', 'it', 'go']]
+list_2 = [['_______', '___', '___'], ['____', '__', '__________'], ['___', '__', '__']]
+
+score = 0
+game_count = 0
+
+while any('_' in word for sublist in list_2 for word in sublist):
+    idx = random.randint(0, len(word_list) - 1)
+    words, blanks = word_list[idx], list_2[idx]
+
+    print(' '.join(blanks))
+    guess_letter = input("Enter a letter: ").lower()
+
+    while not is_valid_input(guess_letter):
+        print('Please enter a single letter.')
+        guess_letter = input("Enter a letter: ").lower()
+
+    if any(guess_letter in word.lower() for word in words):
+        print('Right!')
+        list_2[idx] = [''.join([guess_letter if c.lower() == guess_letter else c for c in word]) for word in words]
+        score += 5
+    else:
+        print('Wrong!')
+        score -= 1
+
+    if all('_' not in word for word in list_2[idx]):
+        game_count += 1
+        print(f'Game completed! Your score is: {score}')
+
+print('You guessed all words!')
+print(f'Final Score: {score}')
